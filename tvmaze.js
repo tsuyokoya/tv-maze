@@ -1,33 +1,13 @@
-/** Given a query string, return array of matching shows:
- *     { id, name, summary, episodesUrl }
- */
-
-/** Search Shows
- *    - given a search term, search for tv shows that
- *      match that query.  The function is async show it
- *       will be returning a promise.
- *
- *   - Returns an array of objects. Each object should include
- *     following show information:
- *    {
-        id: <show id>,
-        name: <show name>,
-        summary: <show summary>,
-        image: <an image from the show data, or a default imege if no image exists, (image isn't needed until later)>
-      }
- */
+// Make an ajax request to the searchShows API
 const searchShows = async (query) => {
-  // TODO: Make an ajax request to the searchShows api.  Remove
-  // hard coded data.
   let arrayOfShows = [];
-  let searchResponse = await axios
+  const searchResponse = await axios
     .get("https://api.tvmaze.com/search/shows", {
       params: {
         q: query,
       },
     })
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
@@ -41,16 +21,13 @@ const searchShows = async (query) => {
   return arrayOfShows;
 };
 
-/** Populate shows list:
- *     - given list of shows, add shows to DOM
- */
-
+// Given list of shows, add shows to DOM
 const populateShows = (shows) => {
   const $showsList = $("#shows-list");
   $showsList.empty();
 
   for (const show of shows) {
-    let $item = $(
+    const $item = $(
       `<div class="col-md-6 col-lg-3 Show" data-show-id="${show.id}">
          <div class="card" data-show-id="${show.id}">
            <div class="card-body">
@@ -59,12 +36,15 @@ const populateShows = (shows) => {
                  ${show.name}
                </a>
              </h5>
+             <button id="episodes-btn"
+               type="button"
+               class="btn btn-primary"
+               data-toggle="modal"
+               data-target="#episodes-modal">
+               View Episodes
+             </button>
              <img class="card-img-top" src=${setImage(show)}>
              <p class="card-text">${setSummary(show)}</p>
-             <button id="episodes-btn" type="button" class="btn btn-primary"
-               data-toggle="modal" data-target="#episodes-modal">
-               Episodes
-             </button>
            </div>
          </div>
        </div>
@@ -99,37 +79,23 @@ const setURL = (content) => {
   }
 };
 
-/** Handle search form submission:
- *    - hide episodes area
- *    - get list of matching shows and show in shows list
- */
-
-$("#search-form").on("submit", async function handleSearch(evt) {
+// Handle search form submission
+// Get list of matching shows and populate
+$("#search-form").on("submit", async (evt) => {
   evt.preventDefault();
 
-  let query = $("#search-query").val();
+  const query = $("#search-query").val();
   if (!query) return;
 
-  // $("#episodes-area").hide();
-
-  let shows = await searchShows(query);
-
+  const shows = await searchShows(query);
   populateShows(shows);
 });
 
-/** Given a show ID, return list of episodes:
- *      { id, name, season, number }
- */
-
+// Return list of episodes given a show ID
 const getEpisodes = async (id) => {
-  // TODO: get episodes from tvmaze
-  //       you can get this by making GET request to
-  //       http://api.tvmaze.com/shows/SHOW-ID-HERE/episodes
-  // TODO: return array-of-episode-info, as described in docstring above
-  let response = await axios
+  const response = await axios
     .get(`http://api.tvmaze.com/shows/${id}/episodes`)
     .then((res) => {
-      console.log(res.data);
       return res.data;
     })
     .catch((err) => {
@@ -139,8 +105,8 @@ const getEpisodes = async (id) => {
   return response;
 };
 
+// Append episodes information to modal
 const populateEpisodes = (episodes) => {
-  console.log(episodes);
   for (const episode of episodes) {
     $(".modal-body").append(
       `<div class="episode-information">
@@ -158,10 +124,18 @@ const populateEpisodes = (episodes) => {
           ${setSummary(episode)}
         </div>
         <div class="episode-rating">
-          Average Rating: ${episode.rating.average}
+          Average Rating: ${setEpisodeRating(episode)}
         </div>
       </div>`
     );
+  }
+};
+
+const setEpisodeRating = (episode) => {
+  if (!episode.rating.average) {
+    return "N/A";
+  } else {
+    return episode.rating.average;
   }
 };
 
@@ -174,12 +148,17 @@ const updateModalHeader = (e) => {
 // handle click on Episodes button
 $(document).on("click", async (e) => {
   if (e.target.id === "episodes-btn") {
-    let episodeId = $(e.target).closest("div.card")[0].dataset.showId;
-    let episodes = await getEpisodes(episodeId);
+    const episodeId = $(e.target).closest("div.card")[0].dataset.showId;
+    const episodes = await getEpisodes(episodeId);
 
     $(".episode-information").remove();
     updateModalHeader(e);
-    console.log(episodes);
     populateEpisodes(episodes);
   }
+});
+
+// set example on load
+$(document).ready(async () => {
+  const example = await searchShows("24");
+  populateShows(example);
 });

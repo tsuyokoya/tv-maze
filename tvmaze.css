@@ -1,7 +1,133 @@
-h1 {
-  color: red;
+body {
+  background-color: rgb(18, 32, 32);
+  color: white;
+  font-family: "Kanit", sans-serif;
 }
 
 img {
   width: 100%;
+}
+
+h1 {
+  color: rgb(255, 234, 47);
+  font-size: 100px;
+  font-weight: bolder;
+}
+
+#search-query {
+  font-family: inherit;
+}
+
+a {
+  color: rgb(255, 234, 47);
+  text-decoration: none;
+}
+
+.card-title {
+  font-size: 35px;
+  text-align: center;
+}
+
+.headers {
+  text-align: center;
+  color: white;
+  margin: 20px;
+}
+
+.card,
+.modal-content {
+  background-color: rgb(56, 57, 61);
+}
+
+.Show {
+  display: flex;
+}
+
+.card {
+  align-items: stretch;
+  box-shadow: 5px 5px 5px white;
+  margin-bottom: 20px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+#episodes-btn {
+  justify-content: center;
+}
+
+#episodes-btn:hover {
+  transform: scale(1.1);
+  transition: transform 1s;
+}
+
+.modal-content {
+  border: 1px solid white;
+}
+
+.modal-header {
+  justify-content: center;
+}
+
+.modal-title {
+  font-size: 30px;
+  color: rgb(255, 234, 47);
+}
+
+.modal-body {
+  padding: 0;
+  text-align: center;
+}
+
+.general-information {
+  margin-bottom: 10px;
+  font-size: 20px;
+  color: rgb(255, 234, 47);
+}
+
+.close {
+  align-self: flex-start;
+  height: auto;
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  border-radius: 50%;
+  font-weight: bolder;
+  background-color: rgb(255, 234, 47);
+}
+
+.episode-information {
+  border-bottom: 3px solid black;
+  padding: 10px;
+}
+
+.episode-summary {
+  margin: 10px;
+}
+
+.episode-rating {
+  color: rgb(102, 209, 245);
+}
+
+a:hover {
+  color: rgb(102, 209, 245);
+}
+
+.btn-primary,
+#episodes-btn {
+  background-color: rgb(102, 209, 245);
+}
+
+.submit-btn {
+  width: 100px;
+  font-size: 30px;
+}
+
+.form-inline {
+  display: flex;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
 }
