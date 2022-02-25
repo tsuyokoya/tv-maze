@@ -94,7 +94,7 @@ $("#search-form").on("submit", async (evt) => {
 // Return list of episodes given a show ID
 const getEpisodes = async (id) => {
   const response = await axios
-    .get(`http://api.tvmaze.com/shows/${id}/episodes`)
+    .get(`https://api.tvmaze.com/shows/${id}/episodes`)
     .then((res) => {
       return res.data;
     })
