@@ -38,7 +38,6 @@ const searchShows = async (query) => {
     arrayOfShows.push(result.show);
   }
 
-  console.log(arrayOfShows);
   return arrayOfShows;
 };
 
@@ -58,7 +57,10 @@ const populateShows = (shows) => {
              <h5 class="card-title">${show.name}</h5>
              <img class="card-img-top" src=${setShowImage(show)}>
              <p class="card-text">${show.summary}</p>
-             <button id="episodes-btn">Episodes</button>
+             <button id="episodes-btn" type="button" class="btn btn-primary"
+               data-toggle="modal" data-target="#episodes-modal">
+               Episodes
+             </button>
            </div>
          </div>
        </div>
@@ -114,25 +116,32 @@ const getEpisodes = async (id) => {
       console.log(err);
     });
 
-  console.log(response);
   return response;
 };
 
 const populateEpisodes = (episodes) => {
+  console.log(episodes);
   for (const episode of episodes) {
-    console.log(episode);
-    $("#episodes-list").append(
-      `<li>${episode.name} (Season ${episode.season}, Episode ${episode.number})</li>`
+    $(".modal-body").append(
+      `<div class="episode-information">${episode.name} (Season ${episode.season}, Episode ${episode.number})</div>`
     );
   }
+};
+
+const updateModalHeader = (e) => {
+  const showTitle = $(e.target).siblings(".card-title")[0].innerText;
+  $("#episodesModalLabel")[0].innerText = showTitle;
+  return showTitle;
 };
 
 // handle click on Episodes button
 $(document).on("click", async (e) => {
   if (e.target.id === "episodes-btn") {
     let episodeId = $(e.target).closest("div.card")[0].dataset.showId;
-    console.log(episodeId);
     let episodes = await getEpisodes(episodeId);
+
+    $(".episode-information").remove();
+    updateModalHeader(e);
     console.log(episodes);
     populateEpisodes(episodes);
   }
