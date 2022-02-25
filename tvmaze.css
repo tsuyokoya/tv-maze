@@ -131,3 +131,12 @@ a:hover {
   margin-left: 10%;
   margin-right: 10%;
 }
+
+#footer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2.5rem;
+  color: white;
+  margin: 0;
+}
