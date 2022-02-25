@@ -54,9 +54,13 @@ const populateShows = (shows) => {
       `<div class="col-md-6 col-lg-3 Show" data-show-id="${show.id}">
          <div class="card" data-show-id="${show.id}">
            <div class="card-body">
-             <h5 class="card-title">${show.name}</h5>
-             <img class="card-img-top" src=${setShowImage(show)}>
-             <p class="card-text">${show.summary}</p>
+             <h5 class="card-title">
+               <a href=${setURL(show)} target="_blank">
+                 ${show.name}
+               </a>
+             </h5>
+             <img class="card-img-top" src=${setImage(show)}>
+             <p class="card-text">${setSummary(show)}</p>
              <button id="episodes-btn" type="button" class="btn btn-primary"
                data-toggle="modal" data-target="#episodes-modal">
                Episodes
@@ -71,11 +75,27 @@ const populateShows = (shows) => {
   }
 };
 
-const setShowImage = (show) => {
-  if (!show.image) {
+const setSummary = (content) => {
+  if (!content.summary) {
+    return "";
+  } else {
+    return content.summary;
+  }
+};
+
+const setImage = (content) => {
+  if (!content.image) {
     return "https://tinyurl.com/tv-missing";
   } else {
-    return show.image.original;
+    return content.image.original;
+  }
+};
+
+const setURL = (content) => {
+  if (!content.url) {
+    return;
+  } else {
+    return content.url;
   }
 };
 
@@ -123,7 +143,24 @@ const populateEpisodes = (episodes) => {
   console.log(episodes);
   for (const episode of episodes) {
     $(".modal-body").append(
-      `<div class="episode-information">${episode.name} (Season ${episode.season}, Episode ${episode.number})</div>`
+      `<div class="episode-information">
+        <div class="general-information">
+          <a href="${setURL(episode)}" target="_blank">
+            ${episode.name} (Season ${episode.season}, Episode ${
+        episode.number
+      })
+          </a>
+        </div>
+        <div class="episode-image-div">
+          <img class="episode-image" src = ${setImage(episode)}>
+        </div>
+        <div class="episode-summary">
+          ${setSummary(episode)}
+        </div>
+        <div class="episode-rating">
+          Average Rating: ${episode.rating.average}
+        </div>
+      </div>`
     );
   }
 };
