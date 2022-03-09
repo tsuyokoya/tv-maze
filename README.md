@@ -1,6 +1,6 @@
 # TV Maze
 
-<!-- <img src='./sampleConnectFour.gif' alt='Connect Four Gif' height='350' width='500'> -->
+<img src='./tvmaze.png' alt='tv maze screenshot' height='450' width='600'>
 
 ## 🧐 Project Description
 
