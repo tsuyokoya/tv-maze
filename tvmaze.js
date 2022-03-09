@@ -1,24 +1,23 @@
 // Make an ajax request to the searchShows API
 const searchShows = async (query) => {
   let arrayOfShows = [];
-  const searchResponse = await axios
-    .get("https://api.tvmaze.com/search/shows", {
-      params: {
-        q: query,
-      },
-    })
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 
-  for (const result of searchResponse) {
-    arrayOfShows.push(result.show);
+  try {
+    const searchResponse = await axios.get(
+      "https://api.tvmaze.com/search/shows",
+      {
+        params: {
+          q: query,
+        },
+      }
+    );
+    for (const result of searchResponse.data) {
+      arrayOfShows.push(result.show);
+    }
+    return arrayOfShows;
+  } catch (err) {
+    console.log(err);
   }
-
-  return arrayOfShows;
 };
 
 // Given list of shows, add shows to DOM
@@ -93,16 +92,14 @@ $("#search-form").on("submit", async (evt) => {
 
 // Return list of episodes given a show ID
 const getEpisodes = async (id) => {
-  const response = await axios
-    .get(`https://api.tvmaze.com/shows/${id}/episodes`)
-    .then((res) => {
-      return res.data;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  return response;
+  try {
+    const response = await axios.get(
+      `https://api.tvmaze.com/shows/${id}/episodes`
+    );
+    return response.data;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 // Append episodes information to modal
@@ -148,7 +145,8 @@ const updateModalHeader = (e) => {
 // handle click on Episodes button
 $(document).on("click", async (e) => {
   if (e.target.id === "episodes-btn") {
-    const episodeId = $(e.target).closest("div.card")[0].dataset.showId;
+    const showDiv = $(e.target).closest("div.card")[0];
+    const episodeId = showDiv.dataset.showId;
     const episodes = await getEpisodes(episodeId);
 
     $(".episode-information").remove();
